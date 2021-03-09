@@ -15,7 +15,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-from apex import amp
+#from apex import amp
 from fairseq.models.roberta import RobertaModel as FairseqRobertModel
 from pytorch_pretrained_bert import BertAdam as Adam
 from tensorboardX import SummaryWriter
