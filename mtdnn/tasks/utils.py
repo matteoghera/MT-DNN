@@ -221,8 +221,8 @@ def load_qqp(file_path, kwargs: dict = {}):
             if is_train and len(blocks) < 6:
                 skipped += 1
                 continue
-            if not is_train:
-                assert len(blocks) == 3
+            if not is_train and len(blocks) < 3:
+                continue
             lab = 0
             if is_train:
                 lab = int(blocks[-1])
@@ -259,8 +259,8 @@ def load_rte(file_path, kwargs: dict = {}):
             blocks = line.strip().split("\t")
             if is_train and len(blocks) < 4:
                 continue
-            if not is_train:
-                assert len(blocks) == 3
+            if not is_train and len(blocks) < 3:
+                continue
             lab = "not_entailment"
             if is_train:
                 lab = blocks[-1]
@@ -297,8 +297,8 @@ def load_wnli(file_path, kwargs: dict = {}):
             blocks = line.strip().split("\t")
             if is_train and len(blocks) < 4:
                 continue
-            if not is_train:
-                assert len(blocks) == 3
+            if not is_train and len(blocks) < 3:
+                continue
             lab = 0
             if is_train:
                 lab = int(blocks[-1])
