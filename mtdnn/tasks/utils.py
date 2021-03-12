@@ -340,7 +340,7 @@ def load_sst(file_path, kwargs: dict = {}):
                 lab = int(blocks[-1])
                 sample = {"uid": cnt, "premise": blocks[0], "label": lab}
             else:
-                sample = {"uid": int(blocks[0]), "premise": blocks[1], "label": lab}
+                sample = {"uid": cnt, "premise": blocks[0], "label": lab}
 
             cnt += 1
             rows.append(sample)
