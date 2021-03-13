@@ -158,9 +158,9 @@ def load_mrpc(file_path, kwargs: dict = {}):
                 continue
             blocks = line.strip().split("\t")
             assert len(blocks) > 4
-            lab = 0
-            if is_train:
-                lab = int(blocks[0])
+            lab = int(blocks[0])
+            if lab==cnt:
+                lab=0
             sample = {
                 "uid": cnt,
                 "premise": blocks[-2],
@@ -270,6 +270,14 @@ def load_rte(file_path, kwargs: dict = {}):
                     "hypothesis": blocks[-2],
                     "label": lab,
                 }
+            elif len(blocks)>3:
+                lab = blocks[-1]
+                sample = {
+                    "uid": int(blocks[0]),
+                    "premise": blocks[-3],
+                    "hypothesis": blocks[-2],
+                    "label": lab,
+                }
             else:
                 sample = {
                     "uid": int(blocks[0]),
@@ -308,6 +316,14 @@ def load_wnli(file_path, kwargs: dict = {}):
                     "hypothesis": blocks[-2],
                     "label": lab,
                 }
+            elif len(blocks)>3:
+                lab = int(blocks[-1])
+                sample = {
+                    "uid": cnt,
+                    "premise": blocks[-3],
+                    "hypothesis": blocks[-2],
+                    "label": lab,
+                }
             else:
                 sample = {
                     "uid": cnt,
@@ -335,12 +351,17 @@ def load_sst(file_path, kwargs: dict = {}):
             blocks = line.strip().split("\t")
             if is_train and len(blocks) < 2:
                 continue
-            lab = 0
+
+            last_block=blocks[-1]
             if is_train:
                 lab = int(blocks[-1])
                 sample = {"uid": cnt, "premise": blocks[0], "label": lab}
-            else:
+            elif last_block.isnumeric():
+                lab = int(blocks[-1])
                 sample = {"uid": cnt, "premise": blocks[0], "label": lab}
+            else:
+                lab = 0
+                sample = {"uid": cnt, "premise": blocks[1], "label": lab}
 
             cnt += 1
             rows.append(sample)
@@ -367,8 +388,12 @@ def load_cola(file_path, kwargs: dict = {}):
             if is_train:
                 lab = int(blocks[1])
                 sample = {"uid": cnt, "premise": blocks[-1], "label": lab}
+            elif len(blocks)>2:
+                lab = int(blocks[1])
+                sample = {"uid": cnt, "premise": blocks[-1], "label": lab}
             else:
                 sample = {"uid": cnt, "premise": blocks[-1], "label": lab}
+
             rows.append(sample)
             cnt += 1
     return rows
@@ -390,6 +415,14 @@ def load_stsb(file_path, kwargs: dict = {}):
             assert len(blocks) > 8
             score = "0.0"
             if is_train:
+                score = blocks[-1]
+                sample = {
+                    "uid": cnt,
+                    "premise": blocks[-3],
+                    "hypothesis": blocks[-2],
+                    "label": score,
+                }
+            elif len(blocks)>9:
                 score = blocks[-1]
                 sample = {
                     "uid": cnt,
